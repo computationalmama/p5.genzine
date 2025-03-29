@@ -333,7 +333,8 @@ function(t){var n={annotations:[],f2:function(t){return t.toFixed(2)},notEmpty:f
  * Licensed under the MIT License.
  * http://opensource.org/licenses/mit-license
  */
-function(t){return t.events.push(["initialized",function(){this.canvas.pdf=this}]),t.canvas={getContext:function(t){return this.pdf.context2d._canvas=this,this.pdf.context2d},style:{}},Object.defineProperty(t.canvas,"width",{get:function(){return this._width},set:function(t){this._width=t,this.getContext("2d").pageWrapX=t+1}}),Object.defineProperty(t.canvas,"height",{get:function(){return this._height},set:function(t){this._height=t,this.getContext("2d").pageWrapY=t+1}}),this}(e.API),/** ====================================================================
+function(t){return t.events.push(["initialized",function(){this.canvas.pdf=this}]),t.canvas={getContext:function(t){return this.pdf.context2d._canvas=this,this.pdf.context2d},style:{}},Object.defineProperty(t.canvas,"width",{get:function(){return this._width},set:function(t){this._width=t,this.getContext("2d").pageWrapX=t+1}}),Object.defineProperty(t.canvas,"height",{get:function(){return this._height},set:function(t){this._height=t,this.getContext("2d").pageWrapY=t+1}}),this}(e.API),
+/** ====================================================================
  * jsPDF Cell plugin
  * Copyright (c) 2013 Youssef Beddad, youssef.beddad@gmail.com
  *               2013 Eduardo Menezes de Morais, eduardo.morais@usp.br
@@ -987,10 +988,8 @@ function draw() {
 
   if (borderYes) {
     pixelDensity(2);
-    changePixelDensity(2);
-  } else {
+  } else if(!borderYes) {
     pixelDensity(5);
-    changePixelDensity(5);
   }
 
   mousePosition()
@@ -1092,7 +1091,7 @@ function preSet() {
 function printSetting() {
 
   const printRotate =  angleMode()==='degrees'? 90: HALF_PI;
-  changePixelDensity(pD);
+  // changePixelDensity(pD);
 
   push()
   resizeCanvas(pHeight*2, pWidth*4);
