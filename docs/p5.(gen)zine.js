@@ -13941,6 +13941,8 @@ function printSetting() {
 
   push();
   resizeCanvas(pHeight * 2, pWidth * 4);
+  push();
+  translate(PRINTMARGIN, PRINTMARGIN);
   clear();
   background(255);
   push();
@@ -13967,6 +13969,7 @@ function printSetting() {
   rotate(printRotate);
   translate(height - pWidth * 2, -pHeight);
   image(back, 0, 0);
+  pop();
   pop();
   pop();
 }
@@ -14040,12 +14043,97 @@ function downloadJPG() {
   borderYes = true;
 }
 
+const PRINTMARGIN = 0.98; // in inches
+
 function downloadPDF() {
   borderYes = false;
   printSetting();
   const imgData = canvas.toDataURL("image/jpeg", 1.0);
-  const pdf = new jsPDF("p", "in", [8.3, 11.7]);
-  pdf.addImage(imgData, "JPEG", 0, 0, 8.3, 11.7);
+  const pdf = new jsPDF("p", "in", [
+    8.3 + PRINTMARGIN * 2,
+    11.7 + PRINTMARGIN * 2,
+  ]);
+  pdf.setLineWidth(0.01);
+  pdf.line(0, PRINTMARGIN, PRINTMARGIN, PRINTMARGIN); // top left horizontal
+  pdf.line(PRINTMARGIN, 0, PRINTMARGIN, PRINTMARGIN); // top left vertical
+  pdf.line(0, 11.7 + PRINTMARGIN, PRINTMARGIN, 11.7 + PRINTMARGIN); // bottom left horizontal
+  pdf.line(
+    PRINTMARGIN,
+    11.7 + PRINTMARGIN,
+    PRINTMARGIN,
+    11.7 + PRINTMARGIN * 2,
+  ); // bottom left vertical
+
+  pdf.line(8.3 + PRINTMARGIN, PRINTMARGIN, 8.3 + PRINTMARGIN * 2, PRINTMARGIN); //top right horizontal
+  pdf.line(8.3 + PRINTMARGIN, 0, 8.3 + PRINTMARGIN, PRINTMARGIN); //top right vertical
+  pdf.line(
+    8.3 + PRINTMARGIN,
+    11.7 + PRINTMARGIN,
+    8.3 + PRINTMARGIN * 2,
+    11.7 + PRINTMARGIN,
+  ); //bottom right horizontal
+
+  pdf.line(
+    8.3 + PRINTMARGIN,
+    11.7 + PRINTMARGIN,
+    8.3 + PRINTMARGIN,
+    11.7 + PRINTMARGIN * 2,
+  ); //bottom right vertical
+
+  pdf.line(8.3 / 2 + PRINTMARGIN, 0, 8.3 / 2 + PRINTMARGIN, PRINTMARGIN); //top half vertical
+  pdf.line(
+    8.3 / 2 + PRINTMARGIN,
+    11.7 + PRINTMARGIN,
+    8.3 / 2 + PRINTMARGIN,
+    11.7 + PRINTMARGIN * 2,
+  ); //bottom half vertical
+
+  pdf.line(0, PRINTMARGIN + 11.7 / 4, PRINTMARGIN, PRINTMARGIN + 11.7 / 4); // left first
+  pdf.line(
+    0,
+    PRINTMARGIN + (11.7 / 4) * 2,
+    PRINTMARGIN,
+    PRINTMARGIN + (11.7 / 4) * 2,
+  ); // left second
+  pdf.line(
+    0,
+    PRINTMARGIN + (11.7 / 4) * 3,
+    PRINTMARGIN,
+    PRINTMARGIN + (11.7 / 4) * 3,
+  ); // left third
+  pdf.line(
+    0,
+    PRINTMARGIN + (11.7 / 4) * 4,
+    PRINTMARGIN,
+    PRINTMARGIN + (11.7 / 4) * 4,
+  ); // left fourth
+
+  pdf.line(
+    8.3 + PRINTMARGIN,
+    PRINTMARGIN + 11.7 / 4,
+    8.3 + PRINTMARGIN * 2,
+    PRINTMARGIN + 11.7 / 4,
+  ); // right first
+  pdf.line(
+    8.3 + PRINTMARGIN,
+    PRINTMARGIN + (11.7 / 4) * 2,
+    8.3 + PRINTMARGIN * 2,
+    PRINTMARGIN + (11.7 / 4) * 2,
+  ); // right second
+  pdf.line(
+    8.3 + PRINTMARGIN,
+    PRINTMARGIN + (11.7 / 4) * 3,
+    8.3 + PRINTMARGIN * 2,
+    PRINTMARGIN + (11.7 / 4) * 3,
+  ); // right third
+  pdf.line(
+    8.3 + PRINTMARGIN,
+    PRINTMARGIN + (11.7 / 4) * 4,
+    8.3 + PRINTMARGIN * 2,
+    PRINTMARGIN + (11.7 / 4) * 4,
+  ); // right fourth
+
+  pdf.addImage(imgData, "JPEG", PRINTMARGIN, PRINTMARGIN, 8.3, 11.7);
 
   let filename;
   if (typeof zine.title !== "undefined") {
