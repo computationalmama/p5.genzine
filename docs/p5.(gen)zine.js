@@ -13746,8 +13746,9 @@ function setup() {
   two = createGraphics(pWidth * 2, pHeight);
   three = createGraphics(pWidth * 2, pHeight);
   back = createGraphics(pWidth, pHeight);
+  poster = createGraphics(pHeight * 2, pWidth * 4);
 
-  all.push(cover, one, two, three, back);
+  all.push(cover, one, two, three, back, poster);
 
   // pageSize attr
   cover.pageSize = "single";
@@ -13755,6 +13756,7 @@ function setup() {
   two.pageSize = "full";
   three.pageSize = "full";
   back.pageSize = "single";
+  poster.pageSize = "doubleFull";
 
   pixelDensity(1);
   frameRate(fR);
@@ -13791,6 +13793,9 @@ function setup() {
   if (typeof backSet === "function") {
     backSet();
   }
+  if (typeof posterSet === "function") {
+    posterSet();
+  }
 }
 
 function draw() {
@@ -13821,6 +13826,10 @@ function draw() {
     backPage();
   }
 
+  if (typeof posterPage === "function") {
+    posterPage();
+  }
+
   if (typeof coverDraw === "function") {
     coverDraw();
   }
@@ -13835,6 +13844,9 @@ function draw() {
   }
   if (typeof backDraw === "function") {
     backDraw();
+  }
+  if (typeof posterDraw === "function") {
+    posterDraw();
   }
 
   if (borderYes) {
@@ -13912,7 +13924,7 @@ function updateAdaptiveWidth() {
 }
 
 function preSet() {
-  resizeCanvas(windowWidth - 17, windowWidth * 3.3);
+  resizeCanvas(windowWidth - 17, windowWidth * 5);
   push();
   // textSize(20);
   // textFont("monospace");
@@ -13974,6 +13986,14 @@ function printSetting() {
   pop();
 }
 
+function printSettingPoster() {
+  resizeCanvas(pHeight * 2, pWidth * 4);
+  push();
+  translate(PRINTMARGIN, PRINTMARGIN);
+  image(poster, 0, 0);
+  pop();
+}
+
 function drawBorder() {
   push();
   preSet();
@@ -14004,6 +14024,14 @@ function drawBorder() {
     aHeight,
   );
 
+  image(
+    poster,
+    width / 2 - aWidth / 2,
+    gap + (aHeight + gap) * 5,
+    aHeight,
+    aWidth * 2,
+  );
+
   noStroke();
   fill("#ed225d");
   textSize(15);
@@ -14013,6 +14041,7 @@ function drawBorder() {
   text("twoPage()", width / 2 - aWidth, gap + (aHeight + gap) * 2 - 10);
   text("threePage()", width / 2 - aWidth, gap + (aHeight + gap) * 3 - 10);
   text("backPage()", width / 2 - aWidth / 2, gap + (aHeight + gap) * 4 - 10);
+  text("posterPage()", width / 2 - aWidth / 2, gap + (aHeight + gap) * 5 - 10);
 
   noFill();
   stroke("#ed225d");
@@ -14025,6 +14054,13 @@ function drawBorder() {
   rect(width / 2 - aWidth, gap + (aHeight + gap) * 3, aWidth, aHeight);
   rect(width / 2 - aWidth + aWidth, gap + (aHeight + gap) * 3, aWidth, aHeight);
   rect(width / 2 - aWidth / 2, gap + (aHeight + gap) * 4, aWidth, aHeight);
+  rect(
+    width / 2 - aWidth + aWidth / 2,
+    gap + (aHeight + gap) * 5,
+    aHeight,
+    aWidth * 2,
+  );
+
   pop();
 }
 
@@ -14040,6 +14076,7 @@ function downloadJPG() {
   two.save("2-genZ" + hour() + minute() + second() + ".jpg");
   three.save("3-genZ" + hour() + minute() + second() + ".jpg");
   back.save("4-genZ" + hour() + minute() + second() + ".jpg");
+  poster.save("5-genZ" + hour() + minute() + second() + ".jpg");
   borderYes = true;
 }
 
